@@ -4,7 +4,7 @@ import galleryItems from './gallery-items.js';
 const refs = {
   ul: document.querySelector('.gallery'),
   div: document.querySelector('.lightbox'),
-  modalImg: document.querySelector('.lightbox__image'),
+  lightboxImg: document.querySelector('.lightbox__image'),
   lightbox: document.querySelector('.lightbox'),
   closeModalBtn: document.querySelector('button[data-action="close-lightbox"]'),
   lightboxContent: document.querySelector('.lightbox__content'),
@@ -37,21 +37,30 @@ const galleryMarkup = galleryItems.reduce((acc, item) => {
 
 refs.ul.insertAdjacentHTML('beforeend', galleryMarkup);
 
+//при наведении на картинку подгружаем изображение оригинального размера
+refs.ul.addEventListener('mouseover', handleMouseoverImg);
+
+function handleMouseoverImg(e) {
+  if (e.target === e.currentTarget) {
+    return;
+  }
+
+  refs.lightboxImg.src = e.target.dataset.source;
+  refs.lightboxImg.alt = e.target.getAttribute('alt');
+}
+
 // отображаем изображение оригинального размера
-refs.ul.addEventListener('click', e => {
+refs.ul.addEventListener('click', handleImgClick);
+
+function handleImgClick(e) {
   e.preventDefault();
   if (e.target === e.currentTarget) {
     return;
   }
-  const imgUrl = e.target.dataset.source;
-  const imgAlt = e.target.getAttribute('alt');
-
-  refs.modalImg.src = imgUrl;
-  refs.modalImg.alt = imgAlt;
 
   refs.div.classList.add('is-open');
   window.addEventListener('keydown', handleKeyPress);
-});
+}
 
 // закрываем модальное окно
 refs.closeModalBtn.addEventListener('click', closeModal);
