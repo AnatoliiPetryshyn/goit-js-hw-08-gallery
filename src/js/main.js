@@ -37,18 +37,6 @@ const galleryMarkup = galleryItems.reduce((acc, item) => {
 
 refs.ul.insertAdjacentHTML('beforeend', galleryMarkup);
 
-//при наведении на картинку подгружаем изображение оригинального размера
-refs.ul.addEventListener('mouseover', handleMouseoverImg);
-
-function handleMouseoverImg(e) {
-  if (e.target === e.currentTarget) {
-    return;
-  }
-
-  refs.lightboxImg.src = e.target.dataset.source;
-  refs.lightboxImg.alt = e.target.getAttribute('alt');
-}
-
 // отображаем изображение оригинального размера
 refs.ul.addEventListener('click', handleImgClick);
 
@@ -57,6 +45,9 @@ function handleImgClick(e) {
   if (e.target === e.currentTarget) {
     return;
   }
+
+  refs.lightboxImg.src = e.target.dataset.source;
+  refs.lightboxImg.alt = e.target.getAttribute('alt');
 
   refs.div.classList.add('is-open');
   window.addEventListener('keydown', handleKeyPress);
@@ -68,6 +59,8 @@ refs.lightboxContent.addEventListener('click', handleOverlayClick);
 
 function closeModal() {
   refs.lightbox.classList.remove('is-open');
+  refs.lightboxImg.src = '';
+  refs.lightboxImg.alt = '';
   window.removeEventListener('keydown', handleKeyPress);
 }
 
